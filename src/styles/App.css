@@ -1,0 +1,295 @@
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #121212;
+  color: white;
+}
+
+.main-content {
+  display: flex;
+  flex: 1;
+  padding: 20px;
+  gap: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .main-content {
+    flex-direction: column;
+  }
+}
+
+.controls-panel {
+  flex: 0 0 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.font-board {
+  flex: 1;
+  background-color: #1E1E1E;
+  border-radius: 16px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+  padding: 30px;
+  overflow: auto;
+  border: 1px solid #333;
+}
+
+.font-preview {
+  margin-bottom: 30px;
+  border-bottom: 1px solid #333;
+  padding-bottom: 20px;
+}
+
+.font-preview:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.font-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  font-size: 12px;
+  color: #999;
+}
+
+.font-sample {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  color: white;
+}
+
+.mood-selector {
+  margin-top: 20px;
+}
+
+.recommendations {
+  margin-top: 20px;
+}
+
+.recommendation-item {
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 8px;
+  transition: background-color 0.2s;
+}
+
+.recommendation-item:hover {
+  background-color: #333;
+}
+
+/* New styles inspired by the image */
+.control-card {
+  background-color: #1E1E1E;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+  border: 1px solid #333;
+  margin-bottom: 20px;
+}
+
+.control-card-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.control-card-number {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50px;
+  height: 50px;
+  background-color: #5CFF5C; /* Lime green */
+  color: #000;
+  font-size: 24px;
+  font-weight: 800;
+  border-radius: 8px;
+  margin-right: 15px;
+}
+
+.control-card-number.blue {
+  background-color: #00B2FF; /* Bright blue */
+}
+
+.control-card-title {
+  font-size: 24px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.font-card {
+  background-color: #1E1E1E;
+  border-radius: 12px;
+  padding: 15px;
+  margin-bottom: 15px;
+  border: 1px solid #333;
+  transition: all 0.3s ease;
+}
+
+.font-card:hover {
+  border-color: #5CFF5C;
+  box-shadow: 0 0 10px rgba(92, 255, 92, 0.3);
+}
+
+.font-card.selected {
+  border-color: #5CFF5C;
+  box-shadow: 0 0 15px rgba(92, 255, 92, 0.4);
+}
+
+.font-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.font-card-name {
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.font-card-category {
+  color: #999;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.font-card-preview {
+  padding: 10px 0;
+}
+
+.mood-button {
+  background-color: #1E1E1E;
+  color: white;
+  border: 1px solid #333;
+  border-radius: 8px;
+  padding: 10px 15px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 600;
+}
+
+.mood-button:hover {
+  background-color: #333;
+}
+
+.mood-button.active {
+  background-color: #5CFF5C;
+  color: #000;
+  border-color: #5CFF5C;
+}
+
+.mood-button.active.blue {
+  background-color: #00B2FF;
+  border-color: #00B2FF;
+}
+
+.app-title {
+  font-size: 32px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin: 0;
+}
+
+.app-subtitle {
+  font-size: 16px;
+  color: #999;
+  margin-top: 5px;
+}
+
+.section-title {
+  font-size: 20px;
+  font-weight: 800;
+  text-transform: uppercase;
+  margin-bottom: 15px;
+  letter-spacing: 0.5px;
+}
+
+.font-board-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #333;
+}
+
+.font-board-title {
+  font-size: 24px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.font-board-subtitle {
+  font-size: 14px;
+  color: #999;
+}
+
+.font-pair-card {
+  background-color: #252525;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  border: 1px solid #333;
+}
+
+.font-pair-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.font-pair-title {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.font-pair-role {
+  background-color: #5CFF5C;
+  color: #000;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.font-pair-role.body {
+  background-color: #00B2FF;
+}
+
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #333 #1E1E1E;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #1E1E1E;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #333;
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: #444;
+}
