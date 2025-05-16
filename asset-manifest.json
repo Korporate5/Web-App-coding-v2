@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/Web-App-coding-v2/static/css/main.62581782.css",
+    "main.js": "/Web-App-coding-v2/static/js/main.42a4d0b3.js",
+    "index.html": "/Web-App-coding-v2/index.html",
+    "main.62581782.css.map": "/Web-App-coding-v2/static/css/main.62581782.css.map",
+    "main.42a4d0b3.js.map": "/Web-App-coding-v2/static/js/main.42a4d0b3.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.62581782.css",
+    "static/js/main.42a4d0b3.js"
+  ]
+}
