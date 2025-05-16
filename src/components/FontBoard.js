@@ -51,16 +51,9 @@ function FontBoard({ selectedFonts, sampleText }) {
                         selectedFonts.find(f => f.size >= 24) || 
                         selectedFonts[0];
                         
-      const subheadingFont = selectedFonts.find(f => f.role === 'subheading') || 
-                          selectedFonts.find(f => f.size >= 18 && f.size < 24) || 
-                          headingFont;
-                          
       const bodyFont = selectedFonts.find(f => f.role === 'body') || 
                       selectedFonts.find(f => f.size < 18) || 
                       (selectedFonts.length > 1 ? selectedFonts[1] : selectedFonts[0]);
-                      
-      const captionFont = selectedFonts.find(f => f.role === 'caption') || 
-                        bodyFont;
 
       // Create a clone of the article preview with font annotations
       const previewClone = articlePreviewRef.current.cloneNode(true);
@@ -181,22 +174,15 @@ function FontBoard({ selectedFonts, sampleText }) {
                       selectedFonts.find(f => f.size >= 24) || 
                       selectedFonts[0];
                       
-    const subheadingFont = selectedFonts.find(f => f.role === 'subheading') || 
-                        selectedFonts.find(f => f.size >= 18 && f.size < 24) || 
-                        headingFont;
-                        
     const bodyFont = selectedFonts.find(f => f.role === 'body') || 
                     selectedFonts.find(f => f.size < 18) || 
                     (selectedFonts.length > 1 ? selectedFonts[1] : selectedFonts[0]);
-                    
-    const captionFont = selectedFonts.find(f => f.role === 'caption') || 
-                      bodyFont;
 
     // Create a text representation of the font information
-    const fontInfo = `\nFont Selection Summary\n\nHeading Font: ${headingFont.family}, ${headingFont.size}px, ${headingFont.variant}\nSubheading Font: ${subheadingFont.family}, ${subheadingFont.size}px, ${subheadingFont.variant}\nBody Font: ${bodyFont.family}, ${bodyFont.size}px, ${bodyFont.variant}\nCaption Font: ${captionFont.family}, ${captionFont.size}px, ${captionFont.variant}\n\n`;
+    const fontInfo = `\nFont Selection Summary\n\nHeading Font: ${headingFont.family}, ${headingFont.size}px, ${headingFont.variant}\nBody Font: ${bodyFont.family}, ${bodyFont.size}px, ${bodyFont.variant}\n\n`;
     
     // Create a text representation of the article content
-    const articleContent = `${sampleArticleContent.title} (${headingFont.family}, ${headingFont.size}px)\n${sampleArticleContent.subtitle} (${subheadingFont.family}, ${subheadingFont.size}px)\n\n${sampleArticleContent.paragraphs.join('\n\n')} (${bodyFont.family}, ${bodyFont.size}px)\n\n"${sampleArticleContent.quote}" \u2014 ${sampleArticleContent.quoteAuthor} (${headingFont.family}, ${Math.min(headingFont.size * 0.8, 32)}px)\n\n${sampleArticleContent.caption} (${captionFont.family}, ${Math.max(captionFont.size * 0.8, 12)}px)`;
+    const articleContent = `${sampleArticleContent.title} (${headingFont.family}, ${headingFont.size}px)\n${sampleArticleContent.subtitle} (${headingFont.family}, ${headingFont.size}px)\n\n${sampleArticleContent.paragraphs.join('\n\n')} (${bodyFont.family}, ${bodyFont.size}px)\n\n"${sampleArticleContent.quote}" \u2014 ${sampleArticleContent.quoteAuthor} (${headingFont.family}, ${Math.min(headingFont.size * 0.8, 32)}px)\n\n${sampleArticleContent.caption} (${bodyFont.family}, ${Math.max(bodyFont.size * 0.8, 12)}px)`;
     
     // Combine the font info and article content
     const exportContent = fontInfo + articleContent;
@@ -374,16 +360,12 @@ function FontBoard({ selectedFonts, sampleText }) {
                                   selectedFonts.find(f => f.size >= 24) || 
                                   selectedFonts[0];
                                   
-                const subheadingFont = selectedFonts.find(f => f.role === 'subheading') || 
-                                     selectedFonts.find(f => f.size >= 18 && f.size < 24) || 
-                                     headingFont;
-                                     
+                // Using headingFont directly instead of subheadingFont
                 const bodyFont = selectedFonts.find(f => f.role === 'body') || 
                                 selectedFonts.find(f => f.size < 18) || 
                                 (selectedFonts.length > 1 ? selectedFonts[1] : selectedFonts[0]);
                                 
-                const captionFont = selectedFonts.find(f => f.role === 'caption') || 
-                                  bodyFont;
+                // Using bodyFont directly instead of captionFont
                 
                 return (
                   <>
@@ -409,10 +391,10 @@ function FontBoard({ selectedFonts, sampleText }) {
                       variant="h2" 
                       gutterBottom
                       sx={{ 
-                        fontFamily: `"${subheadingFont.family}", ${subheadingFont.category}`,
-                        fontSize: `${Math.min(subheadingFont.size, 28)}px`,
-                        fontWeight: subheadingFont.variant.includes('bold') ? 'bold' : 600,
-                        fontStyle: subheadingFont.variant.includes('italic') ? 'italic' : 'normal',
+                        fontFamily: `"${headingFont.family}", ${headingFont.category}`,
+                        fontSize: `${Math.min(headingFont.size, 28)}px`,
+                        fontWeight: headingFont.variant.includes('bold') ? 'bold' : 600,
+                        fontStyle: headingFont.variant.includes('italic') ? 'italic' : 'normal',
                         lineHeight: 1.3,
                         mb: 3,
                         color: '#ccc'
@@ -479,10 +461,10 @@ function FontBoard({ selectedFonts, sampleText }) {
                     <Typography 
                       variant="caption"
                       sx={{ 
-                        fontFamily: `"${captionFont.family}", ${captionFont.category}`,
-                        fontSize: `${Math.max(captionFont.size * 0.8, 12)}px`,
-                        fontWeight: captionFont.variant.includes('bold') ? 'bold' : 'normal',
-                        fontStyle: captionFont.variant.includes('italic') ? 'italic' : 'normal',
+                        fontFamily: `"${bodyFont.family}", ${bodyFont.category}`,
+                        fontSize: `${Math.max(bodyFont.size * 0.8, 12)}px`,
+                        fontWeight: bodyFont.variant.includes('bold') ? 'bold' : 'normal',
+                        fontStyle: bodyFont.variant.includes('italic') ? 'italic' : 'normal',
                         display: 'block',
                         mt: 4,
                         color: '#999',

@@ -118,7 +118,6 @@ export const getAIRecommendations = async (mood, currentFonts = [], customPrompt
         'sports': ['sans-serif', 'display'],
         'music': ['display', 'handwriting'],
         'art': ['display', 'handwriting'],
-        'digital': ['sans-serif'],
       };
       
       // Check if any words in the prompt match our mappings
