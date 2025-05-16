@@ -9,8 +9,12 @@ import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import Slider from '@mui/material/Slider';
 import Box from '@mui/material/Box';
-import Chip from '@mui/material/Chip';import ButtonGroup from '@mui/material/ButtonGroup';import AddIcon from '@mui/icons-material/Add';
-import CircularProgress from '@mui/material/CircularProgress';import TuneIcon from '@mui/icons-material/Tune';import { loadFonts } from '../services/fontService';
+import Chip from '@mui/material/Chip';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import AddIcon from '@mui/icons-material/Add';
+import CircularProgress from '@mui/material/CircularProgress';
+import TuneIcon from '@mui/icons-material/Tune';
+import { loadFonts } from '../services/fontService';
 
 function FontControls({
   availableFonts,

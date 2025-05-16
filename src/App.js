@@ -112,8 +112,8 @@ function App() {
   const [sampleText, setSampleText] = useState('Typography is the art and technique of arranging type.');
   const [mood, setMood] = useState('professional');
   const [customPrompt, setCustomPrompt] = useState('');
+  const [loading, setLoading] = useState(false);
   const [recommendations, setRecommendations] = useState([]);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     // Load fonts from Google Fonts API
@@ -143,9 +143,9 @@ function App() {
         // Get initial recommendations
         const initialRecommendations = await getAIRecommendations('professional', [], '');
         setRecommendations(initialRecommendations);
+        setLoading(false);
       } catch (error) {
-        console.error('Error loading fonts:', error);
-      } finally {
+        console.error('Error fetching fonts:', error);
         setLoading(false);
       }
     };
@@ -171,9 +171,9 @@ function App() {
 
   const handleMoodChange = async (newMood) => {
     setMood(newMood);
-    setCustomPrompt(''); // Clear custom prompt when selecting a predefined mood
     try {
       setLoading(true);
+      setCustomPrompt(''); // Clear custom prompt when selecting a predefined mood
       const newRecommendations = await getAIRecommendations(newMood, selectedFonts, '');
       setRecommendations(newRecommendations);
     } catch (error) {
@@ -204,7 +204,7 @@ function App() {
       <div className="app">
         <Header />
         <main className="main-content">
-          <div className="controls-panel">
+          <div className="controls-container">
             <FontControls 
               availableFonts={availableFonts}
               selectedFonts={selectedFonts}
@@ -213,17 +213,16 @@ function App() {
               onUpdateFont={handleUpdateFont}
               onSampleTextChange={setSampleText}
               onMoodChange={handleMoodChange}
-              onCustomPromptChange={handleCustomPromptChange}
               currentMood={mood}
-              customPrompt={customPrompt}
               loading={loading}
+              onCustomPromptChange={handleCustomPromptChange}
+              customPrompt={customPrompt}
             />
             <AIRecommendations 
               recommendations={recommendations} 
               onSelectRecommendation={handleAddFont}
               loading={loading}
               currentMood={mood}
-              customPrompt={customPrompt}
             />
           </div>
           <FontBoard 

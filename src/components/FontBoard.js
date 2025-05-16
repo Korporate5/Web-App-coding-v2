@@ -304,7 +304,7 @@ function FontBoard({ selectedFonts, sampleText }) {
                 {sampleText}
               </Typography>
               <Typography variant="caption" sx={{ display: 'block', mt: 2, color: '#777' }}>
-                {font.size}px u2022 {font.category}ory}ory}ory}
+                {font.size}px • {font.category}
               </Typography>
             </Box>
           ))}
@@ -471,7 +471,7 @@ function FontBoard({ selectedFonts, sampleText }) {
                           color: '#aaa'
                         }}
                       >
-                        u2014 {sampleArticleContent.quoteAuthor}hor}hor}hor}
+                        — {sampleArticleContent.quoteAuthor}
                       </Typography>
                     </Box>
                     

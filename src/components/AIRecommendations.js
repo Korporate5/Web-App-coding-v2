@@ -4,9 +4,11 @@ import Typography from '@mui/material/Typography';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
-import ListItemButton from '@mui/material/ListItemButton';import Box from '@mui/material/Box';
+import ListItemButton from '@mui/material/ListItemButton';
+import Box from '@mui/material/Box';
 import Chip from '@mui/material/Chip';
-import CircularProgress from '@mui/material/CircularProgress';import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
+import CircularProgress from '@mui/material/CircularProgress';
+import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import AddIcon from '@mui/icons-material/Add';
 import { loadFonts } from '../services/fontService';
 
