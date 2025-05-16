@@ -102,7 +102,6 @@ export const getAIRecommendations = async (mood, currentFonts = [], customPrompt
         // Emotional terms
         'happy': ['handwriting', 'display'],
         'sad': ['serif'],
-        'serious': ['serif', 'sans-serif'],
         'romantic': ['handwriting', 'serif'],
         'bold': ['sans-serif', 'display'],
         'strong': ['sans-serif'],
@@ -111,7 +110,6 @@ export const getAIRecommendations = async (mood, currentFonts = [], customPrompt
         
         // Industry-specific terms
         'fashion': ['serif', 'display'],
-        'tech': ['sans-serif'],
         'food': ['handwriting', 'display'],
         'travel': ['sans-serif', 'handwriting'],
         'education': ['serif', 'sans-serif'],
@@ -120,6 +118,7 @@ export const getAIRecommendations = async (mood, currentFonts = [], customPrompt
         'sports': ['sans-serif', 'display'],
         'music': ['display', 'handwriting'],
         'art': ['display', 'handwriting'],
+        'digital': ['sans-serif'],
       };
       
       // Check if any words in the prompt match our mappings
