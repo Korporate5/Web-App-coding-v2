@@ -49,6 +49,13 @@ export const getAIRecommendations = async (mood, currentFonts = [], customPrompt
     // Filter fonts based on mood or custom prompt
     let filteredFonts = [];
     
+    // Determine which roles we need to recommend for
+    const currentRoles = currentFonts.map(font => font.role);
+    const needsPrimary = !currentRoles.includes('heading');
+    const needsSecondary = !currentRoles.includes('body');
+    // Always recommend accent fonts
+    const needsAccent = true;
+    
     // If there's a custom prompt, use it to filter fonts
     if (customPrompt && customPrompt.trim() !== '') {
       // Convert prompt to lowercase for case-insensitive matching
@@ -102,6 +109,7 @@ export const getAIRecommendations = async (mood, currentFonts = [], customPrompt
         // Emotional terms
         'happy': ['handwriting', 'display'],
         'sad': ['serif'],
+        'serious': ['serif', 'sans-serif'],
         'romantic': ['handwriting', 'serif'],
         'bold': ['sans-serif', 'display'],
         'strong': ['sans-serif'],
@@ -110,6 +118,7 @@ export const getAIRecommendations = async (mood, currentFonts = [], customPrompt
         
         // Industry-specific terms
         'fashion': ['serif', 'display'],
+        'tech': ['sans-serif'],
         'food': ['handwriting', 'display'],
         'travel': ['sans-serif', 'handwriting'],
         'education': ['serif', 'sans-serif'],
@@ -186,37 +195,142 @@ export const getAIRecommendations = async (mood, currentFonts = [], customPrompt
       !currentFontFamilies.includes(font.family)
     );
     
+    // Determine font pairings based on existing selections
+    let recommendations = [];
+    
+    // Helper function to determine font role compatibility
+    const getFontRoleRecommendations = (font) => {
+      // Default roles this font would be good for
+      let roles = [];
+      
+      // Serif fonts are typically good for headings and sometimes body
+      if (font.category === 'serif') {
+        roles.push('heading');
+        if (Math.random() > 0.5) roles.push('body'); // Some serif fonts work well for body text
+      }
+      // Sans-serif fonts are versatile - good for both headings and body
+      else if (font.category === 'sans-serif') {
+        roles.push('heading');
+        roles.push('body');
+      }
+      // Display fonts are best for headings and accents
+      else if (font.category === 'display') {
+        roles.push('heading');
+        roles.push('accent');
+      }
+      // Handwriting fonts are best for accents
+      else if (font.category === 'handwriting') {
+        roles.push('accent');
+      }
+      // Monospace fonts are good for accents and sometimes body
+      else if (font.category === 'monospace') {
+        roles.push('accent');
+        if (Math.random() > 0.7) roles.push('body'); // Occasionally monospace works for body
+      }
+      
+      // If we have current fonts, adjust recommendations based on compatibility
+      if (currentFonts.length > 0) {
+        // Find primary/heading font if it exists
+        const primaryFont = currentFonts.find(f => f.role === 'heading');
+        // Find secondary/body font if it exists
+        const secondaryFont = currentFonts.find(f => f.role === 'body');
+        
+        if (primaryFont) {
+          // If primary font is serif, recommend sans-serif for body and vice versa
+          if (primaryFont.category === 'serif' && font.category === 'sans-serif') {
+            roles = roles.filter(r => r !== 'heading'); // Remove heading role
+            if (!roles.includes('body')) roles.push('body');
+          }
+          // If primary font is sans-serif, serif can work well for body
+          else if (primaryFont.category === 'sans-serif' && font.category === 'serif') {
+            roles = roles.filter(r => r !== 'heading'); // Remove heading role
+            if (!roles.includes('body')) roles.push('body');
+          }
+          // If primary font is display, recommend serif or sans-serif for body
+          else if (primaryFont.category === 'display' && 
+                  (font.category === 'serif' || font.category === 'sans-serif')) {
+            roles = roles.filter(r => r !== 'heading'); // Remove heading role
+            if (!roles.includes('body')) roles.push('body');
+          }
+        }
+        
+        if (secondaryFont) {
+          // If secondary font is sans-serif, serif or display can work for headings
+          if (secondaryFont.category === 'sans-serif' && 
+              (font.category === 'serif' || font.category === 'display')) {
+            roles = roles.filter(r => r !== 'body'); // Remove body role
+            if (!roles.includes('heading')) roles.push('heading');
+          }
+          // If secondary font is serif, sans-serif or display can work for headings
+          else if (secondaryFont.category === 'serif' && 
+                  (font.category === 'sans-serif' || font.category === 'display')) {
+            roles = roles.filter(r => r !== 'body'); // Remove body role
+            if (!roles.includes('heading')) roles.push('heading');
+          }
+        }
+      }
+      
+      // Always include accent as a possibility for variety
+      if (!roles.includes('accent') && Math.random() > 0.6) {
+        roles.push('accent');
+      }
+      
+      return roles;
+    };
+    
+    // Process each filtered font to add role recommendations
+    filteredFonts.forEach(font => {
+      const recommendedRoles = getFontRoleRecommendations(font);
+      recommendations.push({
+        ...font,
+        recommendedRoles
+      });
+    });
+    
+    // Sort recommendations to prioritize fonts that fill needed roles
+    recommendations.sort((a, b) => {
+      // Prioritize fonts that can be used for roles we need
+      const aFillsNeeded = (needsPrimary && a.recommendedRoles.includes('heading')) || 
+                          (needsSecondary && a.recommendedRoles.includes('body'));
+      const bFillsNeeded = (needsPrimary && b.recommendedRoles.includes('heading')) || 
+                          (needsSecondary && b.recommendedRoles.includes('body'));
+      
+      if (aFillsNeeded && !bFillsNeeded) return -1;
+      if (!aFillsNeeded && bFillsNeeded) return 1;
+      return 0;
+    });
+    
     // Return top 5 recommendations
-    return filteredFonts.slice(0, 5);
+    return recommendations.slice(0, 5);
   } catch (error) {
     console.error('Error getting AI recommendations:', error);
     
     // Fallback to static recommendations if API fails
     const mockRecommendations = {
       'professional': [
-        { family: 'Roboto', category: 'sans-serif' },
-        { family: 'Merriweather', category: 'serif' },
-        { family: 'Source Sans Pro', category: 'sans-serif' },
+        { family: 'Roboto', category: 'sans-serif', recommendedRoles: ['heading', 'body'] },
+        { family: 'Merriweather', category: 'serif', recommendedRoles: ['heading', 'body'] },
+        { family: 'Source Sans Pro', category: 'sans-serif', recommendedRoles: ['body', 'accent'] },
       ],
       'creative': [
-        { family: 'Pacifico', category: 'display' },
-        { family: 'Amatic SC', category: 'handwriting' },
-        { family: 'Caveat', category: 'handwriting' },
+        { family: 'Pacifico', category: 'display', recommendedRoles: ['heading', 'accent'] },
+        { family: 'Amatic SC', category: 'handwriting', recommendedRoles: ['heading', 'accent'] },
+        { family: 'Caveat', category: 'handwriting', recommendedRoles: ['accent'] },
       ],
       'elegant': [
-        { family: 'Cormorant Garamond', category: 'serif' },
-        { family: 'Playfair Display', category: 'serif' },
-        { family: 'Cinzel', category: 'serif' },
+        { family: 'Cormorant Garamond', category: 'serif', recommendedRoles: ['heading', 'body'] },
+        { family: 'Playfair Display', category: 'serif', recommendedRoles: ['heading'] },
+        { family: 'Cinzel', category: 'serif', recommendedRoles: ['heading', 'accent'] },
       ],
       'playful': [
-        { family: 'Comic Neue', category: 'handwriting' },
-        { family: 'Fredoka One', category: 'display' },
-        { family: 'Bubblegum Sans', category: 'display' },
+        { family: 'Comic Neue', category: 'handwriting', recommendedRoles: ['body', 'accent'] },
+        { family: 'Fredoka One', category: 'display', recommendedRoles: ['heading', 'accent'] },
+        { family: 'Bubblegum Sans', category: 'display', recommendedRoles: ['heading', 'accent'] },
       ],
       'modern': [
-        { family: 'Montserrat', category: 'sans-serif' },
-        { family: 'Raleway', category: 'sans-serif' },
-        { family: 'Poppins', category: 'sans-serif' },
+        { family: 'Montserrat', category: 'sans-serif', recommendedRoles: ['heading', 'body'] },
+        { family: 'Raleway', category: 'sans-serif', recommendedRoles: ['heading', 'body'] },
+        { family: 'Poppins', category: 'sans-serif', recommendedRoles: ['heading', 'body', 'accent'] },
       ],
     };
     

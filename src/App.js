@@ -140,8 +140,12 @@ function App() {
           { family: 'Open Sans', category: 'sans-serif', variant: 'regular', size: 16, role: 'body' },
         ]);
         
-        // Get initial recommendations
-        const initialRecommendations = await getAIRecommendations('professional', [], '');
+        // Get initial recommendations based on the initial selected fonts
+        const initialFonts = [
+          { family: 'Playfair Display', category: 'serif', variant: 'regular', size: 48, role: 'heading' },
+          { family: 'Open Sans', category: 'sans-serif', variant: 'regular', size: 16, role: 'body' },
+        ];
+        const initialRecommendations = await getAIRecommendations('professional', initialFonts, '');
         setRecommendations(initialRecommendations);
         setLoading(false);
       } catch (error) {
@@ -197,7 +201,29 @@ function App() {
       }
     }
   };
-
+  
+  // Update recommendations when selected fonts change
+  useEffect(() => {
+    const updateRecommendations = async () => {
+      if (selectedFonts.length > 0) {
+        try {
+          setLoading(true);
+          const newRecommendations = await getAIRecommendations(mood, selectedFonts, customPrompt);
+          setRecommendations(newRecommendations);
+        } catch (error) {
+          console.error('Error updating recommendations:', error);
+        } finally {
+          setLoading(false);
+        }
+      }
+    };
+    
+    // Only update when fonts change, not on initial render
+    if (selectedFonts.length > 0) {
+      updateRecommendations();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [JSON.stringify(selectedFonts)]);
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -215,14 +241,13 @@ function App() {
               onMoodChange={handleMoodChange}
               currentMood={mood}
               loading={loading}
-              onCustomPromptChange={handleCustomPromptChange}
-              customPrompt={customPrompt}
             />
             <AIRecommendations 
               recommendations={recommendations} 
               onSelectRecommendation={handleAddFont}
               loading={loading}
               currentMood={mood}
+              customPrompt={customPrompt}
             />
           </div>
           <FontBoard 

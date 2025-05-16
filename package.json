@@ -2,7 +2,7 @@
   "name": "typographic-mood-board",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://korporate5.github.io/Web-App-coding-v2/",
+  "homepage": "https://korporate5.github.io/Web_App_coding_v2/",
   "dependencies": {
     "@emotion/react": "^11.11.0",
     "@emotion/styled": "^11.11.0",

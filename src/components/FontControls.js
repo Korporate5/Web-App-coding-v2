@@ -23,9 +23,7 @@ function FontControls({
   onUpdateFont,
   onSampleTextChange,
   onMoodChange,
-  onCustomPromptChange,
   currentMood,
-  customPrompt,
   loading
 }) {
   const [newFontFamily, setNewFontFamily] = useState('');
@@ -33,7 +31,6 @@ function FontControls({
   const [newFontSize, setNewFontSize] = useState(16);
   const [newFontRole, setNewFontRole] = useState('body');
   const [sampleText, setSampleText] = useState('Typography is the art and technique of arranging type.');
-  const [searchQuery, setSearchQuery] = useState('');
 
   const handleAddFont = () => {
     if (!newFontFamily) return;
@@ -73,11 +70,6 @@ function FontControls({
     { value: 'playful', label: 'Playful', color: '#00B2FF' },
     { value: 'modern', label: 'Modern', color: '#5CFF5C' },
   ];
-
-  // Filter fonts based on search query
-  const filteredFonts = availableFonts.filter(font => 
-    font.family.toLowerCase().includes(searchQuery.toLowerCase())
-  );
 
   return (
     <Paper 
@@ -132,81 +124,6 @@ function FontControls({
             letterSpacing: '0.5px'
           }}
         >
-          Project Mood
-        </Typography>
-        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 3 }}>
-          {moods.map((mood) => (
-            <Button
-              key={mood.value}
-              variant={currentMood === mood.value && !customPrompt ? 'contained' : 'outlined'}
-              onClick={() => onMoodChange(mood.value)}
-              disabled={loading}
-              sx={{
-                backgroundColor: currentMood === mood.value && !customPrompt ? mood.color : 'transparent',
-                color: currentMood === mood.value && !customPrompt ? '#000' : '#fff',
-                borderColor: mood.color,
-                '&:hover': {
-                  backgroundColor: currentMood === mood.value && !customPrompt ? mood.color : `${mood.color}33`,
-                  borderColor: mood.color
-                },
-                mb: 1,
-                mr: 1
-              }}
-            >
-              {mood.label}
-            </Button>
-          ))}
-        </Box>
-        
-        <Typography 
-          variant="subtitle1" 
-          sx={{ 
-            mb: 1.5, 
-            fontWeight: 700, 
-            fontSize: '16px',
-            textTransform: 'uppercase',
-            letterSpacing: '0.5px'
-          }}
-        >
-          Custom Prompt
-        </Typography>
-        <TextField
-          fullWidth
-          placeholder="Describe your desired style or feeling..."
-          value={customPrompt}
-          onChange={(e) => onCustomPromptChange(e.target.value)}
-          variant="outlined"
-          size="small"
-          disabled={loading}
-          sx={{
-            mb: 3,
-            '& .MuiOutlinedInput-root': {
-              '& fieldset': {
-                borderColor: '#444',
-              },
-              '&:hover fieldset': {
-                borderColor: '#666',
-              },
-              '&.Mui-focused fieldset': {
-                borderColor: '#00B2FF',
-              },
-            },
-          }}
-          helperText="Try 'elegant and modern' or 'playful for kids' or 'professional for finance'"
-        />
-      </Box>
-      
-      <Box sx={{ mb: 3 }}>
-        <Typography 
-          variant="subtitle1" 
-          sx={{ 
-            mb: 1.5, 
-            fontWeight: 700, 
-            fontSize: '16px',
-            textTransform: 'uppercase',
-            letterSpacing: '0.5px'
-          }}
-        >
           Sample Text
         </Typography>
         <TextField
@@ -216,7 +133,9 @@ function FontControls({
           value={sampleText}
           onChange={handleSampleTextChange}
           variant="outlined"
-          size="small"          sx={{
+          size="small"          
+          sx={{
+            mb: 3,
             '& .MuiOutlinedInput-root': {
               '& fieldset': {
                 borderColor: '#444',
@@ -228,7 +147,44 @@ function FontControls({
                 borderColor: '#5CFF5C',
               },
             },
-          }}        />
+          }}        
+        />
+        
+        <Typography 
+          variant="subtitle1" 
+          sx={{ 
+            mb: 1.5, 
+            fontWeight: 700, 
+            fontSize: '16px',
+            textTransform: 'uppercase',
+            letterSpacing: '0.5px'
+          }}
+        >
+          Project Mood
+        </Typography>
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 3 }}>
+          {moods.map((mood) => (
+            <Button
+              key={mood.value}
+              variant={currentMood === mood.value ? 'contained' : 'outlined'}
+              onClick={() => onMoodChange(mood.value)}
+              disabled={loading}
+              sx={{
+                backgroundColor: currentMood === mood.value ? mood.color : 'transparent',
+                color: currentMood === mood.value ? '#000' : '#fff',
+                borderColor: mood.color,
+                '&:hover': {
+                  backgroundColor: currentMood === mood.value ? mood.color : `${mood.color}33`,
+                  borderColor: mood.color
+                },
+                mb: 1,
+                mr: 1
+              }}
+            >
+              {mood.label}
+            </Button>
+          ))}
+        </Box>
       </Box>
       
       <Box sx={{ mb: 3 }}>
@@ -248,29 +204,6 @@ function FontControls({
           Add New Font
         </Typography>
         
-        <TextField
-          fullWidth
-          size="small"
-          label="Search Fonts"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          sx={{ 
-            mb: 2,
-            '& .MuiOutlinedInput-root': {
-              '& fieldset': {
-                borderColor: '#444',
-              },
-              '&:hover fieldset': {
-                borderColor: '#666',
-              },
-              '&.Mui-focused fieldset': {
-                borderColor: '#5CFF5C',
-              },
-            },
-          }}
-          disabled={loading}
-        />
-        
         <FormControl 
           fullWidth 
           size="small" 
@@ -281,7 +214,8 @@ function FontControls({
             value={newFontFamily}
             onChange={(e) => setNewFontFamily(e.target.value)}
             label="Font Family"
-            disabled={loading}            sx={{
+            disabled={loading}            
+            sx={{
               '& .MuiOutlinedInput-notchedOutline': {
                 borderColor: '#444',
               },
@@ -291,13 +225,14 @@ function FontControls({
               '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
                 borderColor: '#5CFF5C',
               },
-            }}          >
+            }}          
+          >
             {loading ? (
               <MenuItem value="">Loading fonts...</MenuItem>
-            ) : filteredFonts.length === 0 ? (
+            ) : availableFonts.length === 0 ? (
               <MenuItem value="">No fonts found</MenuItem>
             ) : (
-              filteredFonts.slice(0, 100).map((font) => (
+              availableFonts.slice(0, 100).map((font) => (
                 <MenuItem 
                   key={font.family} 
                   value={font.family}
@@ -402,7 +337,8 @@ function FontControls({
           startIcon={loading ? <CircularProgress size={20} color="inherit" /> : <AddIcon />}
           onClick={handleAddFont}
           fullWidth
-          disabled={loading || !newFontFamily}          sx={{
+          disabled={loading || !newFontFamily}          
+          sx={{
             backgroundColor: '#5CFF5C',
             color: '#000',
             '&:hover': {
@@ -410,60 +346,10 @@ function FontControls({
             },
             fontWeight: 600,
             py: 1
-          }}        >
+          }}        
+        >
           {loading ? 'Loading...' : 'Add Font'}
         </Button>
-      </Box>
-      
-      <Box sx={{ mt: 3 }}>
-        <Typography 
-          variant="subtitle1" 
-          sx={{ 
-            mb: 1.5, 
-            fontWeight: 700, 
-            fontSize: '16px',
-            textTransform: 'uppercase',
-            letterSpacing: '0.5px'
-          }}
-        >
-          Current Fonts
-        </Typography>
-        
-        {selectedFonts.length === 0 ? (
-          <Box 
-            sx={{ 
-              backgroundColor: '#252525', 
-              p: 2, 
-              borderRadius: '8px',
-              textAlign: 'center'
-            }}
-          >
-            <Typography variant="body2" color="textSecondary">
-              No fonts added yet
-            </Typography>
-          </Box>
-        ) : (
-          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-            {selectedFonts.map((font, index) => (
-              <Chip
-                key={index}
-                label={`${font.family} (${font.role})`}
-                onDelete={() => onRemoveFont(index)}
-                disabled={loading}                sx={{
-                  backgroundColor: font.role === 'heading' ? '#5CFF5C33' : '#00B2FF33',
-                  color: font.role === 'heading' ? '#5CFF5C' : '#00B2FF',
-                  borderColor: font.role === 'heading' ? '#5CFF5C' : '#00B2FF',
-                  border: '1px solid',
-                  '& .MuiChip-deleteIcon': {
-                    color: font.role === 'heading' ? '#5CFF5C' : '#00B2FF',
-                    '&:hover': {
-                      color: '#fff',
-                    },
-                  },
-                }}              />
-            ))}
-          </Box>
-        )}
       </Box>
     </Paper>
   );
